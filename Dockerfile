@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/streamlit/streamlit-example.git .
+RUN git clone https://github.com/will-isles/todo-board.git .
 
 RUN pip3 install -r requirements.txt
 
