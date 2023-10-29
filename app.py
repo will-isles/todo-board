@@ -21,7 +21,7 @@ st.set_page_config(page_title="Streamlit App", page_icon=":smiley:", layout="wid
 # Task Layout
 def layoutTask(task):
     with st.container():
-        st.header(f"ContentA: {task.content}")
+        st.header(f"Content: {task.content}")
         col1, col2, col3 = st.columns(3)
         with col1:
             st.write(f"Labels: {task.labels}")
