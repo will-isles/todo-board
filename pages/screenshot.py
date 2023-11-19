@@ -24,7 +24,7 @@ def take_screenshot():
 
     # Wait until the page has finished loading
     print("Waiting for page to load...")
-    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.TAG_NAME, 'p')))
+    WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.TAG_NAME, 'p')))
     print("Page loaded.")
 
     screenshot = driver.save_screenshot('static/screenshot.png')

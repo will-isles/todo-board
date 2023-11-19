@@ -7,13 +7,13 @@ RUN apt-get install curl -y
 RUN apt-get install git -y
 RUN apt-get install unzip -y
 RUN apt-get install zip -y
-RUN rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/will-isles/todo-board.git .
+RUN rm -rf /var/lib/apt/lists/*
 RUN pip3 install -r requirements.txt
 
 # Install chromedriver
-RUN wget -N https://chromedriver.storage.googleapis.com/72.0.3626.69/chromedriver_linux64.zip -P ~/
+RUN wget -N https://chromedriver.storage.googleapis.com/100.0.4896.20/chromedriver_linux64.zip -P ~/
 RUN unzip ~/chromedriver_linux64.zip -d ~/
 RUN rm ~/chromedriver_linux64.zip
 RUN mv -f ~/chromedriver /usr/local/bin/chromedriver
