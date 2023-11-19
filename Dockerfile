@@ -1,20 +1,26 @@
-FROM python:3.9-slim
+FROM python:3.9
 
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
-    wget \
     software-properties-common \
     git \
+    wget \
+    libx11-6 \
+    libx11-xcb1 \
+    libfontconfig1 \
+    libfreetype6 \
+    libxext6 \
+    libxrender1 \
+    libxtst6 \
     && rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/will-isles/todo-board.git .
 
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-
-RUN dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
+RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN apt-get install -y ./google-chrome-stable_current_amd64.deb; apt-get -fy install
 
 RUN pip3 install -r requirements.txt
 

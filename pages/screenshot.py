@@ -16,7 +16,7 @@ st.set_page_config(
 def take_screenshot():
     options = ChromeOptions()
     options.add_argument("--headless=new")
-    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager("89.0.4389.23").install()), options=options)
+    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
     # Set the dimensions of the window
     driver.set_window_size(800, 480)  # width, height
     driver.get('http://localhost:8501')
