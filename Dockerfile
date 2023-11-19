@@ -7,9 +7,9 @@ RUN apt-get install curl -y
 RUN apt-get install git -y
 RUN apt-get install unzip -y
 RUN apt-get install zip -y
+RUN rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/will-isles/todo-board.git .
-RUN rm -rf /var/lib/apt/lists/*
 RUN pip3 install -r requirements.txt
 
 # Install chromedriver
