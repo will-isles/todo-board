@@ -15,6 +15,7 @@ st.set_page_config(
 
 def take_screenshot():
     options = ChromeOptions()
+    options.add_argument("--no-sandbox")
     options.add_argument("--headless=new")
     driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
     # Set the dimensions of the window

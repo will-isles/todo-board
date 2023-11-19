@@ -2,27 +2,29 @@ FROM python:3.9
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    curl \
-    software-properties-common \
-    git \
-    wget \
-    libx11-6 \
-    libx11-xcb1 \
-    libfontconfig1 \
-    libfreetype6 \
-    libxext6 \
-    libxrender1 \
-    libxtst6 \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update
+RUN apt-get install curl -y 
+RUN apt-get install git -y
+RUN apt-get install unzip -y
+RUN apt-get install zip -y
+RUN rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/will-isles/todo-board.git .
-
-RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN apt-get install -y ./google-chrome-stable_current_amd64.deb; apt-get -fy install
-
 RUN pip3 install -r requirements.txt
+
+# Install chromedriver
+RUN wget -N https://chromedriver.storage.googleapis.com/72.0.3626.69/chromedriver_linux64.zip -P ~/
+RUN unzip ~/chromedriver_linux64.zip -d ~/
+RUN rm ~/chromedriver_linux64.zip
+RUN mv -f ~/chromedriver /usr/local/bin/chromedriver
+RUN chown root:root /usr/local/bin/chromedriver
+RUN chmod 0755 /usr/local/bin/chromedriver
+
+# Install chrome broswer
+RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+RUN echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+RUN apt-get -y update
+RUN apt-get -y install google-chrome-stable
 
 EXPOSE 8501
 
