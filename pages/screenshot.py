@@ -19,11 +19,12 @@ def take_screenshot():
     driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
     # Set the dimensions of the window
     driver.set_window_size(800, 480)  # width, height
-
     driver.get('http://localhost:8501')
 
     # Wait until the page has finished loading
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'p')))
+    print("Waiting for page to load...")
+    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.TAG_NAME, 'p')))
+    print("Page loaded.")
 
     screenshot = driver.save_screenshot('static/screenshot.png')
     driver.quit()
