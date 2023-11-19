@@ -11,6 +11,10 @@ RUN apt-get update && apt-get install -y \
 
 RUN git clone https://github.com/will-isles/todo-board.git .
 
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+
+RUN dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
+
 RUN pip3 install -r requirements.txt
 
 EXPOSE 8501
