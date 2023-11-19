@@ -18,6 +18,10 @@ def set_page_container_style(
                 .block-container {{
                     padding-top: {padding_top}rem;
                 }}
+
+                [data-testid="collapsedControl"] {
+                    display: none
+                }
             </style>
             ''',
             unsafe_allow_html=True,
