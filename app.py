@@ -1,8 +1,7 @@
-from pickle import LIST
-import streamlit as st
-from todoist_api_python.api import TodoistAPI
 import os
 from dotenv import load_dotenv
+import streamlit as st
+from todoist_api_python.api import TodoistAPI
 
 load_dotenv()
 
