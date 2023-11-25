@@ -19,9 +19,9 @@ def set_page_container_style(
                     padding-top: {padding_top}rem;
                 }}
 
-                [data-testid="collapsedControl"] {
+                [data-testid="collapsedControl"] {{
                     display: none
-                }
+                }}
             </style>
             ''',
             unsafe_allow_html=True,
