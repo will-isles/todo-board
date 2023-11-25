@@ -10,7 +10,7 @@ load_dotenv()
 TODOIST_API_KEY = os.getenv('TODOIST_API_KEY')
 api = TodoistAPI(TODOIST_API_KEY)
 
-LIST_LENGTH = os.getenv('LIST_LENGTH')  or 8
+LIST_LENGTH = int(os.getenv('LIST_LENGTH'))  or 8
 
 
 def set_page_container_style(
