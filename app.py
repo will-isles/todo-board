@@ -29,22 +29,17 @@ def set_page_container_style(
 
 
 # Fetch all tasks
-def fetch_tasks():
+def fetch_tasks(filter="due:next week|overdue|no date"):
     try:
-        projects = api.get_projects()
-        inbox = next(
-            (project for project in projects if project.is_inbox_project == True),
-            None
-        )
-
-        tasks = api.get_tasks(project_id=inbox.id)
+        tasks = api.get_tasks(filter=filter)
         tasks.sort(key=lambda x: x.priority, reverse=True)
+        return tasks
     except Exception as error:
         print(error)
-    return tasks
+    
 
-def write_task(task, col1, col2):
-    priorityEmoji = [ '🟢', '🟡', '🟠','🔴']
+def write_task(task, col1, col2, col3):
+    priorityEmoji = [ '🔵', '🟢', '🟡','🔴']
     labelEmoji = {"Home":"🏠", "Work": "🏢"}
 
     if task.labels == []:
@@ -53,18 +48,44 @@ def write_task(task, col1, col2):
         for label in task.labels:
             task.labels = labelEmoji[label]
     with col1:
-        st.markdown(f"{task.content}")
+        st.markdown(f"**{task.content}**")
                     
     with col2:
+        if task.due != None:
+            st.caption(f"{task.due.string}")
+    
+    with col3:
         st.markdown(f"{priorityEmoji[task.priority-1]} {task.labels}")
-     
 
-st.set_page_config(page_title=None, page_icon=None, layout="centered", initial_sidebar_state="collapsed", menu_items=None)
-set_page_container_style()
+def write_task_block(header, filter, limit):
+    tasks = fetch_tasks(filter=filter)
 
-# Display tasks
-st.subheader('Todoist Tasks')
-col1, col2 = st.columns([8,2])
-tasks = fetch_tasks()[:6]
-for task in tasks:
-    write_task(task, col1, col2)
+    if len(tasks) == 0:
+        return 0
+    
+    if limit <= 0:
+        return 0
+
+    tasks = tasks[:limit]
+    
+    # Display header
+    st.subheader(header)    
+    
+    # Display tasks
+    col1, col2, col3 = st.columns([8,2,2])
+    for task in tasks:
+        write_task(task, col1, col2, col3)
+    return limit - len(tasks) - 1
+
+def create_page():
+    # Set page config  
+    st.set_page_config(page_title=None, page_icon=None, layout="centered", initial_sidebar_state="collapsed", menu_items=None)
+    set_page_container_style()
+
+    # Display tasks
+    limit = 8
+    limit = write_task_block("Overdue", "overdue", limit)
+    limit = write_task_block("Next Week", "next week", limit)
+    limit = write_task_block("Sometime", "no date", limit)
+
+create_page()
