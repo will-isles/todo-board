@@ -15,4 +15,6 @@ jobs:
     - name: Build the Docker image
       run: docker build . -t twistedisles/todo-board:latest
     - name: publish
-      run: docker push twistedisles/todo-board:latest
+      run: |
+        docker login -u twistedisles -p ${{secrets.DOCKER_HUB_TOKEN}}
+        docker push twistedisles/todo-board:latest
