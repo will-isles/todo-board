@@ -1,3 +1,4 @@
+from pickle import LIST
 import streamlit as st
 from todoist_api_python.api import TodoistAPI
 import os
@@ -8,6 +9,9 @@ load_dotenv()
 # Load Todoist List
 TODOIST_API_KEY = os.getenv('TODOIST_API_KEY')
 api = TodoistAPI(TODOIST_API_KEY)
+
+LIST_LENGTH = os.getenv('LIST_LENGTH')  or 8
+
 
 def set_page_container_style(
         padding_top: int = 1
@@ -57,16 +61,16 @@ def write_task(task, col1, col2, col3):
     with col3:
         st.markdown(f"{priorityEmoji[task.priority-1]} {task.labels}")
 
-def write_task_block(header, filter, limit):
+def write_task_block(header, filter, list_length):
     tasks = fetch_tasks(filter=filter)
 
     if len(tasks) == 0:
         return 0
     
-    if limit <= 0:
+    if list_length <= 0:
         return 0
 
-    tasks = tasks[:limit]
+    tasks = tasks[:list_length]
     
     # Display header
     st.subheader(header)    
@@ -75,7 +79,7 @@ def write_task_block(header, filter, limit):
     col1, col2, col3 = st.columns([8,2,2])
     for task in tasks:
         write_task(task, col1, col2, col3)
-    return limit - len(tasks) - 1
+    return list_length - len(tasks) - 1
 
 def create_page():
     # Set page config  
@@ -83,9 +87,9 @@ def create_page():
     set_page_container_style()
 
     # Display tasks
-    limit = 8
-    limit = write_task_block("Overdue", "overdue", limit)
-    limit = write_task_block("Next Week", "next week", limit)
-    limit = write_task_block("Sometime", "no date", limit)
+    list_length = LIST_LENGTH
+    list_length = write_task_block("Overdue", "overdue", list_length)
+    list_length = write_task_block("Next Week", "next week", list_length)
+    list_length = write_task_block("Sometime", "no date", list_length)
 
 create_page()
