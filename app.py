@@ -1,6 +1,7 @@
 import os
-from dotenv import load_dotenv
 import streamlit as st
+from dotenv import load_dotenv
+from datetime import datetime as dt
 from todoist_api_python.api import TodoistAPI
 
 load_dotenv()
@@ -61,8 +62,12 @@ def write_task(task):
         st.markdown(f"**{task.content}**")
                     
     with col2:
-        if task.due != None:
-            st.caption(f"{task.due.string}")
+        formatted = None
+        if task.due.datetime != None:
+            formatted = dt.fromisoformat(task.due.datetime).strftime("%d %b")
+        if task.due.date != None:
+            formatted = dt.strptime(task.due.date, '%Y-%m-%d').strftime("%d %b")
+        st.markdown(f"{formatted}")
     
     with col3:
         st.markdown(f"{priorityEmoji[task.priority-1]} {task.labels}")
@@ -97,6 +102,7 @@ def create_page():
     # Display tasks
     list_length = 7
     list_length = write_task_block("Overdue", "od" , list_length)
+    list_length = write_task_block("Today", "due:today", list_length)
     list_length = write_task_block("Next Week", "due before:+7 days", list_length)
     list_length = write_task_block("Sometime", "no date", list_length)
 
