@@ -7,9 +7,11 @@ load_dotenv()
 
 # Load Todoist List
 TODOIST_API_KEY = os.getenv('TODOIST_API_KEY')
+if TODOIST_API_KEY == None:
+    raise Exception("TODOIST_API_KEY not found in .env file")
+
 api = TodoistAPI(TODOIST_API_KEY)
 
-LIST_LENGTH = int(os.getenv('LIST_LENGTH'))  or 8
 
 
 def set_page_container_style(
@@ -41,15 +43,20 @@ def fetch_tasks(filter="due:next week|overdue|no date"):
         print(error)
     
 
-def write_task(task, col1, col2, col3):
+def write_task(task):
     priorityEmoji = [ '🔵', '🟢', '🟡','🔴']
-    labelEmoji = {"Home":"🏠", "Work": "🏢"}
+    labelEmoji = {"Home":"🏠", "Work": "🏢", "2 minutes": "⏰"}
 
     if task.labels == []:
         task.labels = ""
     else:
         for label in task.labels:
             task.labels = labelEmoji[label]
+
+    st.container()
+    with st.container():
+        col1, col2, col3 = st.columns([8,2,2])
+
     with col1:
         st.markdown(f"**{task.content}**")
                     
@@ -64,10 +71,12 @@ def write_task_block(header, filter, list_length):
     tasks = fetch_tasks(filter=filter)
 
     if len(tasks) == 0:
-        return 0
+        print("No tasks")
+        return list_length
     
     if list_length <= 0:
-        return 0
+        print("No free space for tasks")
+        return list_length
 
     tasks = tasks[:list_length]
     
@@ -75,20 +84,20 @@ def write_task_block(header, filter, list_length):
     st.subheader(header)    
     
     # Display tasks
-    col1, col2, col3 = st.columns([8,2,2])
     for task in tasks:
-        write_task(task, col1, col2, col3)
+        write_task(task)
     return list_length - len(tasks) - 1
 
 def create_page():
+    print("Creating page")
     # Set page config  
     st.set_page_config(page_title=None, page_icon=None, layout="centered", initial_sidebar_state="collapsed", menu_items=None)
     set_page_container_style()
 
     # Display tasks
-    list_length = LIST_LENGTH
-    list_length = write_task_block("Overdue", "overdue", list_length)
-    list_length = write_task_block("Next Week", "next week", list_length)
+    list_length = 7
+    list_length = write_task_block("Overdue", "od" , list_length)
+    list_length = write_task_block("Next Week", "due before:+7 days", list_length)
     list_length = write_task_block("Sometime", "no date", list_length)
 
 create_page()
