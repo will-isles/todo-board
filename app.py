@@ -103,7 +103,7 @@ def create_page():
     list_length = 7
     list_length = write_task_block("Overdue", "od" , list_length)
     list_length = write_task_block("Today", "due:today", list_length)
-    list_length = write_task_block("Next Week", "due before:+7 days", list_length)
+    list_length = write_task_block("This Week", "due before:+7 days & !today", list_length)
     list_length = write_task_block("Sometime", "no date", list_length)
 
 create_page()
