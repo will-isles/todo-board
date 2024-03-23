@@ -14,7 +14,6 @@ if TODOIST_API_KEY == None:
 api = TodoistAPI(TODOIST_API_KEY)
 
 
-
 def set_page_container_style(
         padding_top: int = 1
     ):
@@ -62,11 +61,12 @@ def write_task(task):
         st.markdown(f"**{task.content}**")
                     
     with col2:
-        formatted = None
-        if task.due.datetime != None:
-            formatted = dt.fromisoformat(task.due.datetime).strftime("%d %b")
-        if task.due.date != None:
-            formatted = dt.strptime(task.due.date, '%Y-%m-%d').strftime("%d %b")
+        formatted = ""
+        if not (task.due is None):
+            if not (task.due.datetime is None):
+                formatted = dt.fromisoformat(task.due.datetime).strftime("%d %b")
+            if not (task.due.date is None):
+                formatted = dt.strptime(task.due.date, '%Y-%m-%d').strftime("%d %b")
         st.markdown(f"{formatted}")
     
     with col3:
@@ -74,7 +74,7 @@ def write_task(task):
 
 def write_task_block(header, filter, list_length):
     tasks = fetch_tasks(filter=filter)
-    if not (tasks is None) or len(tasks) == 0:
+    if (tasks is None) or len(tasks) == 0:
         print("No tasks")
         return list_length
     
