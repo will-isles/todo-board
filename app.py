@@ -74,8 +74,7 @@ def write_task(task):
 
 def write_task_block(header, filter, list_length):
     tasks = fetch_tasks(filter=filter)
-
-    if len(tasks) == 0:
+    if not (tasks is None) or len(tasks) == 0:
         print("No tasks")
         return list_length
     
